@@ -1,6 +1,22 @@
 from flask import Flask, url_for, redirect
 app = Flask(__name__)
 
+@app.errorhandler(404)
+def not_found(err):
+    path = url_for("static", filename = "404.png")
+    style = url_for("static", filename = "lab1.css")
+    return '''
+<!doctype html>
+<html>
+<head>
+    <link rel = "stylesheet" href="''' + style +'''"
+</head>
+    <body>
+        <img src="''' + path + '''" class="full-screen-image">
+    </body>
+</html>
+''', 404
+
 @app.route("/")
 @app.route("/lab1/web")
 def web():
@@ -130,3 +146,27 @@ def lab1():
            </body>
            <footer>Ефимова Юлия Алексеевна, ФБИ-22, 3 курс, 2024</footer>
         </html>''', 200
+
+@app.route('/error/400')
+def error_400():
+    return 'Bad Request', 400
+
+@app.route('/error/401')
+def error_401():
+    return 'Unauthorized', 401
+
+@app.route('/error/402')
+def error_402():
+    return 'Payment Required', 402
+
+@app.route('/error/403')
+def error_403():
+    return 'Forbidden', 403
+
+@app.route('/error/405')
+def error_405():
+    return 'Method Not Allowed', 405
+
+@app.route('/error/418')
+def error_418():
+    return "I'm a teapot", 418
