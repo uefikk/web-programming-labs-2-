@@ -30,17 +30,20 @@ def author():
                 <a href="/web">web</a>
             </body>
         </html>"""
+
 @app.route('/lab1/oak')
 def oak():
-    path = url_for("static", filename="oak.jpg")
-    return'''
+    path = url_for("static", filename = "oak.jpg")
+    style = url_for("static", filename = "lab1.css")
+    return '''
 <!doctype html>
 <html>
+    <link rel = "stylesheet" href="''' + style +'''"
     <body>
         <h1>Дуб</h1>
-        <img src="''' + path + '''">
-    </body> 
-</html>    
+        <img src="''' + path + '''" class="oak-image">
+    </body>
+</html>
 '''
 
 count = 0
@@ -74,8 +77,8 @@ def created():
 </html>
 ''', 201
 
-app = Flask(__name__)
+#app = Flask(__name__)
 
-@app.errorhandler(404)
-def not_found(err):
-    return "нет такой страницы:(", 404
+#@app.errorhandler(404)
+#def not_found(err):
+    #return "нет такой страницы:(", 404
