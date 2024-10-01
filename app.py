@@ -87,8 +87,22 @@ def created():
 </html>
 ''', 201
 
-#app = Flask(__name__)
+@app.route('/')
+@app.route('/index')
+def index():
+    style = url_for("static", filename = "lab1.css")
+    return '''<!doctype html>
+        <html>
+        <head>
+            <link rel = "stylesheet" href="''' + style +'''"
+            <title>НГТУ, ФБ, Лабораторные работы</title>
+        </head>
+           <header>
+                НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных
+           </header>
+           <body>
+                <a href='/lab1'>Первая лабораторная</a>
+           </body>
+           <footer>Ефимова Юлия Алексеевна, ФБИ-22, 3 курс, 2024</footer>
+        </html>''', 200
 
-#@app.errorhandler(404)
-#def not_found(err):
-    #return "нет такой страницы:(", 404
