@@ -1,10 +1,12 @@
 from flask import Flask, url_for, redirect, render_template
 from lab1 import lab1
 from lab2 import lab2
+from lab3 import lab3
 
 app = Flask(__name__)
 app.register_blueprint(lab1)
 app.register_blueprint(lab2)
+app.register_blueprint(lab3)
 
 @app.errorhandler(404)
 def not_found(err):
@@ -39,6 +41,7 @@ def index():
            <body>
                 <a href='/lab1'>Первая лабораторная</a>
                 <a href='/lab2/'>Вторая лабораторная</a>
+                <a href='/lab3/'>Третья лабораторная</a>
            </body>
            <footer>Ефимова Юлия Алексеевна, ФБИ-22, 3 курс, 2024</footer>
         </html>''', 200
