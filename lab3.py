@@ -72,3 +72,28 @@ def gratitude():
     if request.args.get('sugar') == 'on':
         price += 10
     return render_template('gratitude.html', price=price)
+
+@lab3.route('/lab3/settings/', methods=['GET', 'POST'])
+def settings():
+    if request.method == 'POST':
+        color = request.form.get('color')
+        bg_color = request.form.get('bg_color')
+        font_size = request.form.get('font_size')
+        font_weight = request.form.get('font_weight')
+
+        resp = make_response(redirect(url_for('lab3.settings')))
+        if color:
+            resp.set_cookie('color', color)
+        if bg_color:
+            resp.set_cookie('bg_color', bg_color)
+        if font_size:
+            resp.set_cookie('font_size', font_size)
+        if font_weight:
+            resp.set_cookie('font_weight', font_weight)
+        return resp
+
+    color = request.cookies.get('color')
+    bg_color = request.cookies.get('bg_color')
+    font_size = request.cookies.get('font_size')
+    font_weight = request.cookies.get('font_weight')
+    return render_template('settings.html', color=color, bg_color=bg_color, font_size=font_size, font_weight=font_weight)
