@@ -97,3 +97,50 @@ def settings():
     font_size = request.cookies.get('font_size')
     font_weight = request.cookies.get('font_weight')
     return render_template('settings.html', color=color, bg_color=bg_color, font_size=font_size, font_weight=font_weight)
+
+@lab3.route('/lab3/ticket_form')
+def ticket_form():
+    return render_template('ticket_form.html')
+
+
+@lab3.route('/lab3/ticket', methods=['POST'])
+def ticket():
+    # Получаем данные из формы
+    fio = request.form.get('fio')
+    shelf = request.form.get('shelf')
+    bed = request.form.get('bed') == 'on'
+    luggage = request.form.get('luggage') == 'on'
+    age = int(request.form.get('age'))
+    departure = request.form.get('departure')
+    destination = request.form.get('destination')
+    date = request.form.get('date')
+    insurance = request.form.get('insurance') == 'on'
+
+    # Проверка полей
+    if not all([fio, shelf, age, departure, destination, date]):
+        flash("Все поля должны быть заполнены")
+        return redirect(url_for('lab3.ticket_form'))
+
+    if not (1 <= age <= 120):
+        flash("Возраст должен быть от 1 до 120 лет")
+        return redirect(url_for('lab3.ticket_form'))
+
+    # Рассчет стоимости
+    price = 1000 if age >= 18 else 700  # Взрослый или детский билет
+
+    if shelf in ["нижняя", "нижняя боковая"]:
+        price += 100
+    if bed:
+        price += 75
+    if luggage:
+        price += 250
+    if insurance:
+        price += 150
+
+    ticket_type = "Детский билет" if age < 18 else "Взрослый билет"
+
+    return render_template('ticket.html', fio=fio, shelf=shelf,
+                           bed=bed, luggage=luggage, age=age,
+                           departure=departure, destination=destination,
+                           date=date, insurance=insurance, price=price,
+                           ticket_type=ticket_type)
