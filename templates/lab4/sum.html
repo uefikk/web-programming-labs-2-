@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block lab %}Суммирование чисел{% endblock %}
+
+{% block main %}
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        <a href="{{ url_for('lab4.sum_form') }}">Вернуться к форме</a>
+    {% else %}
+    <h1>Суммирование чисел</h1>
+    {{ x1 }} + {{ x2 }} = {{ result }}
+    <p><a href="{{ url_for('lab4.sum_form') }}">Вернуться к форме</a></p>
+    {% endif %}
+{% endblock %}
