@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block lab %}Результаты поиска товаров{% endblock %}
+
+{% block main %}
+    <h1>Результаты поиска</h1>
+    {% if products %}
+        <ul>
+            {% for product in products %}
+            <li>
+                {{ product.name }} - {{ product.price }} руб
+                {% if 'brand' in product %} (Бренд: {{ product.brand }}) {% endif %}
+                {% if 'color' in product %} (Цвет: {{ product.color }}) {% endif %}
+                {% if 'author' in product %} (Автор: {{ product.author }}) {% endif %}
+                {% if ' year' in product %} (Год: {{ product.year }}) {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Нет товаров в указанном диапазоне цен.</p>
+{% endif %}
+<a href="/lab3/product_search">Вернуться к поиску</a>
+{% endblock %}
