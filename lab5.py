@@ -67,7 +67,7 @@ def login():
     
     cur = conn.cursor(cursor_factory=RealDictCursor)
     
-    cur.execute(f"SELECT * FROM users WHERE login='{login}';")
+    cur.execute(f"SELECT * FROM users WHERE login=%s;" (login, ))
     
     user = cur.fetchone()
     
@@ -87,17 +87,27 @@ def login():
 
 @lab5.route('/lab5/register', methods = ['GET', 'POST'])
 def reqister():
+    if request.method == 'GET': ""
     
-    conn, cur = db_connect()
+    login = request.form.get('login')
     password = request.form.get('password')
     
+    if not login or not password:
+        error_message = 'Заполните все поля!'
+    if not login:
+        error_message = 'Логин не может быть пустым!'
+    elif not password:
+        error_message = 'Пароль не может быть пустым!'
+    return render_template('lab5/register.html', error=error_message)
+
+    conn, cur = db_connect()
     if cur.fetchone():
         db_close(conn, cur)
         return render_template('lab5/register.html',
                                error="Такой пользователь уже существует")
         
     password_hash = generate_password_hash(password)
-    cur.execute(f"INSERT INTO users (login, password) VALUES ('{login}'), ('{password_hash}');")
+    cur.execute("INSERT INTO users (login, password) VALUES (%s, %s);", (login, password_hash))
     
     db_close(conn, cur)
     
