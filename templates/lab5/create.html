@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+    <h1>Создать статью</h1>
+    <form action="{{ url_for('lab5.create') }}" method="post">
+        <label for="title">Заголовок:</label>
+        <input type="text" id="title" name="title" required>
+        <br>
+        <label for="content">Содержание:</label>
+        <textarea id="content" name="content" required></textarea>
+        <br>
+        <button type="submit">Создать</button>
+    </form>
+{% endblock %}

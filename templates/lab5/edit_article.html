@@ -3,35 +3,35 @@
 {% block lab %}Лабораторная работа 5{% endblock %}
 
 {% block main %}
-    <h1>Создать статью</h1>
+    <h1>Редактировать статью</h1>
     {% if error %}
         <p style="color: red;">{{ error }}</p>
     {% endif %}
-    <form action="{{ url_for('lab5.create') }}" method="post">
+    <form action="{{ url_for('lab5.edit_article', article_id=article.id) }}" method="post">
         <div>
             <label>
                 Название статьи: 
-                <input type="text" maxlength="50" name="title" required>
+                <input type="text" maxlength="50" name="title" value="{{ article.title }}" required>
             </label>
         </div>
         <div>
             <label>
                 Текст статьи:
-                <textarea name="article_text" required></textarea>
+                <textarea name="article_text" required>{{ article.article_text }}</textarea>
             </label>
         </div>
         <div>
             <label>
                 Публичная статья:
-                <input type="checkbox" name="is_public">
+                <input type="checkbox" name="is_public" {% if article.is_public %}checked{% endif %}>
             </label>
         </div>
         <div>
             <label>
                 Любимая статья:
-                <input type="checkbox" name="is_favorite">
+                <input type="checkbox" name="is_favorite" {% if article.is_favorite %}checked{% endif %}>
             </label>
         </div>
-        <button type="submit">Готово</button>
+        <button type="submit">Сохранить</button>
     </form>
 {% endblock %}

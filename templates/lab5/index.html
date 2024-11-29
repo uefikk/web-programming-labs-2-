@@ -5,11 +5,12 @@
 {% block main %}
     <h1>База знаний</h1>
     <div class="button-container">
-        <a href="lab5.list" class="button">Список статей</a>
-        <a href="lab5.create" class="button">Создать статью</a>
-        <a href="lab5.login" class="button">Войти</a>
-        <a href="lab5.register" class="button">Регистрация</a>
-        <a href="lab5.logout" class="button">Выйти</a>
+        <a href="list" class="button">Список статей</a>
+        <a href="create" class="button">Создать статью</a>
+        <a href="login" class="button">Войти</a>
+        <a href="register" class="button">Регистрация</a>
+        <a href="logout" class="button">Выйти</a>
+        <a href="users" class="button">Список пользователей</a>
     </div>
     <p>Имя пользователя: {{ login if login else 'anonymous' }}</p>
 {% endblock %}

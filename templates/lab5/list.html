@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+    <h1>Мои статьи</h1>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    {% if articles %}
+        <ul>
+            {% for article in articles %}
+                <li>
+                    <h2>{{ article.title }}</h2>
+                    <p>{{ article.article_text }}</p>
+                    <a href="{{ url_for('lab5.edit_article', article_id=article.id) }}">Редактировать</a>
+                    <a href="{{ url_for('lab5.delete_article', article_id=article.id) }}">Удалить</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>У вас пока нет статей.</p>
+    {% endif %}
+{% endblock %}
