@@ -22,18 +22,39 @@ function getOfficeList() {
     .then(function(data) {  
         const office_list = data.result;  
         const ul = document.getElementById('office-list');  
+        ul.innerHTML = '';  // Очищаем список перед обновлением
+
+        let totalCost = 0;  // Переменная для хранения общей стоимости арендованных офисов
+
         for(let i = 0; i < office_list.length; i++){  
             const office = office_list[i];  
             const li = document.createElement('li');  
-            li.innerText = `${office.number}: ${office.tenant || 'свободен'}`;  
+            li.innerText = `${office.number}: ${office.tenant || 'свободен'}, стоимость: ${office.price} руб.`;  
              
+            // Кнопка "Забронировать"
             const bookingButton = document.createElement('button'); 
             bookingButton.innerText = 'Забронировать'; 
             bookingButton.onclick = function() {booking(office.number)}; 
             li.appendChild(bookingButton); 
+
+            // Кнопка "Освободить"
+            const unbookingButton = document.createElement('button'); 
+            unbookingButton.innerText = 'Освободить'; 
+            unbookingButton.onclick = function() {unbooking(office.number)}; 
+            li.appendChild(unbookingButton); 
  
             ul.appendChild(li);  
+
+            // Если офис арендован, добавляем его стоимость к общей сумме
+            if (office.tenant) {
+                totalCost += office.price;
+            }
         }  
+
+        // Вывод общей стоимости арендованных офисов
+        const totalCostElement = document.createElement('p');
+        totalCostElement.innerText = `Общая стоимость арендованных офисов: ${totalCost} руб.`;
+        ul.appendChild(totalCostElement);
     });  
 }  
  
@@ -42,7 +63,46 @@ function booking(officeNumber) {
     const json = { 
         'jsonrpc': '2.0',  
         'method': 'booking',  
-        'params': officeNumber,  
+        'params': officeNumber,  // Передаем номер офиса
+        'id': Math.round(Math.random()*1000)  
+    };  
+ 
+    fetch(url, { 
+        method: 'POST', 
+        headers: {'Content-Type': 'application/json'},  
+        body: JSON.stringify(json)  
+    }) 
+    .then(function(response) { 
+        return response.json() 
+    }) 
+    .then(function(data) { 
+        if(data.error) { 
+            switch(data.error.code) {  // Исправляем опечатку: data.eror -> data.error
+                case 1:  
+                    alert('Вы не авторизованы, пожалуйста авторизируйтесь'); 
+                    break; 
+                case 2: 
+                    alert('Офис уже арендован'); 
+                    break; 
+                case -32601: 
+                    alert('Сьранная ошибка'); 
+                    break; 
+            } 
+        } 
+        else { 
+            // Обновляем список офисов
+            document.getElementById('office-list').innerHTML = ''; 
+            getOfficeList(); 
+        } 
+    }); 
+}
+
+function unbooking(officeNumber) { 
+    const url = '/lab6/json-rpc-api'; 
+    const json = { 
+        'jsonrpc': '2.0',  
+        'method': 'unbooking',  
+        'params': officeNumber,  // Передаем номер офиса
         'id': Math.round(Math.random()*1000)  
     };  
  
@@ -60,21 +120,24 @@ function booking(officeNumber) {
                 case 1:  
                     alert('Вы не авторизованы, пожалуйста авторизируйтесь'); 
                     break; 
-                case 2: 
-                    alert('Офис уже арендован'); 
+                case 3: 
+                    alert('Офис не арендован'); 
                     break; 
-                case -32601: 
-                    alert('Сьранная ошибка'); 
+                case 4: 
+                    alert('Вы не можете снять аренду чужого офиса'); 
                     break; 
+                default:
+                    alert('Произошла ошибка'); 
+                    break;
             } 
         } 
         else { 
             document.getElementById('office-list').innerHTML = ''; 
-            getOfficeList(); 
+            getOfficeList();  // Обновляем список офисов
         } 
     }); 
 }
- 
+
     document.addEventListener('DOMContentLoaded', function(){  
         getOfficeList();  
     });  
