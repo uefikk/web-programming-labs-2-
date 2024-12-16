@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort, request
+from flask import Blueprint, render_template, abort, request, jsonify
 from random import randint
 import psycopg2
 from psycopg2.extras import RealDictCursor
@@ -49,7 +49,7 @@ films = [
 
 @lab7.route('/lab7/rest-api/films/', methods=['GET'])
 def get_films():
-    return films
+    return jsonify (films)
 
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['GET'])
 def get_film(id):
@@ -68,9 +68,23 @@ def del_film(id):
     
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['PUT'])
 def put_film(id):
-        film = request.get_json()
-        if film['description'] == '':
+    if id >= len(films):
+        return abort(404)
+    else:
+        film = request.get_json()    
+        if not film['title_ru'] and not film['title']:
+            return {'description': 'Напишите название'}, 400
+        elif not film['title_ru']:
+            return {'description': 'Напишите русское название'}, 400
+        elif not (2024 >= int(film['year']) >= 1895) or film['year'] == '':
+            return {'description': 'Дата введена некорректно'}, 400
+        elif film['description'] == '':
             return {'description': 'Заполните описание'}, 400
+        elif len(film['description']) > 2000:
+            return {'description': 'Максимальная длинна описания - 2000 символов'}, 400
+
+        if film['title_ru'] and not film['title']:
+            film['title'] = film['title_ru']
         films[id] = film
         return films[id]
     
@@ -78,8 +92,20 @@ def put_film(id):
 def add_film():
     film = request.get_json() 
     if not film or not all(k in film for k in ('title', 'title_ru', 'year', 'description')):
-        return abort(400, "Invalid film data")  
-    if film['description'] == '':
-        return {'description': 'Заполните описание'}, 400
-    films.append(film) 
-    return {'id': len(films) - 1}, 201
+        return abort(400, "Invalid film data") 
+    else:
+        if not film['title_ru'] and not film['title']:
+            return {'description': 'Напишите название'}, 400
+        elif not film['title_ru']:
+            return {'description': 'Напишите русское название'}, 400
+        elif not (2024 >= int(film['year']) >= 1895) or film['year'] == '':
+            return {'description': 'Дата введена некорректно'}, 400
+        elif film['description'] == '':
+            return {'description': 'Заполните описание'}, 400
+        elif len(film['description']) > 2000:
+            return {'description': 'Максимальная длинна описания - 2000 символов'}, 400
+
+        if film['title_ru'] and not film['title']:
+            film['title'] = film['title_ru']
+        films.append(film) 
+        return {'id': len(films) - 1}, 201  
