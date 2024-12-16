@@ -66,7 +66,7 @@ def del_film(id):
         del films[id]
         return '', 204
     
-@lab7.route('lab7/rest-api/films/<int:id>', methods=['PUT'])
+@lab7.route('/lab7/rest-api/films/<int:id>', methods=['PUT'])
 def put_film(id):
     if id >= len(films):
         return abort(404)
