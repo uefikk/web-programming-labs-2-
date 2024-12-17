@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <h1>База знаний</h1>
+    <div>
+        <a class="button">Список статей</a>
+        <a class="button">Создать статью</a>
+        <a class="button">Войти</a>
+        <a class="button">Регистрация</a>
+    </div>
+    <p>Имя пользователя: {{ login if login else 'anonymous' }}</p>
+{% endblock %}
