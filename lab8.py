@@ -33,6 +33,9 @@ def register():
     db.session.add(new_user)
     db.session.commit()
     
+    login_user(new_user, remember=False)
+    return redirect('/lab8/login')
+    
 @lab8.route('/lab8/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'GET':
@@ -61,3 +64,48 @@ def articles_list():
 def logout():
     logout_user()
     return redirect('/lab8/')
+
+@lab8.route('/lab8/create', methods=['GET', 'POST'])
+@login_required
+def create_article():
+    if request.method == 'GET':
+        return render_template('lab8/create_article.html')
+    
+    title = request.form.get('title')
+    content = request.form.get('content')
+    
+    new_article = articles(title=title, content=content, user_id=current_user.id)
+    db.session.add(new_article)
+    db.session.commit()
+    
+    return redirect('/lab8/articles/')
+
+@lab8.route('/lab8/articles/<int:article_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_article(article_id):
+    article = articles.query.get_or_404(article_id)
+    
+    if article.user_id != current_user.id:
+        abort(403)
+    
+    if request.method == 'GET':
+        return render_template('lab8/edit_article.html', article=article)
+    
+    article.title = request.form.get('title')
+    article.content = request.form.get('content')
+    db.session.commit()
+    
+    return redirect('/lab8/articles/')
+
+@lab8.route('/lab8/articles/<int:article_id>/delete', methods=['POST'])
+@login_required
+def delete_article(article_id):
+    article = articles.query.get_or_404(article_id)
+    
+    if article.user_id != current_user.id:
+        abort(403)
+    
+    db.session.delete(article)
+    db.session.commit()
+    
+    return redirect('/lab8/articles/')
