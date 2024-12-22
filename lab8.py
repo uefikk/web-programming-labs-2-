@@ -1,5 +1,6 @@
 from flask import Blueprint, url_for, redirect, render_template, request, session, current_app, jsonify, abort
 from random import randint
+import sqlite3
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from db import db
