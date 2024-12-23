@@ -3,7 +3,13 @@
 {% block lab %}Лабораторная работа 9{% endblock %}
 
 {% block main %}
+
     <h1>Новогодняя открытка</h1>
     <p>{{ congrats }}</p>
-    <img src="/static/images/{{ image }}" alt="Подарок" style="max-width: 300px; height: auto;">
+    <img src="/static/images/{{ image }}" alt="Подарок" style="max-width: 300px; height: auto;" class="small-image">
+
+    <!-- Кнопка для сброса данных -->
+    <form method="POST" action="/lab9/reset">
+        <button type="submit">Сбросить и заполнить заново</button>
+    </form>
 {% endblock %}

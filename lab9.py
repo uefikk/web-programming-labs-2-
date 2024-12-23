@@ -66,5 +66,20 @@ def card():
     else:
         image = 'cake.jpg'
 
+    session['congrats'] = congrats
+    session['image'] = image
+
     return render_template('/lab9/card.html', congrats=congrats, image=image)
 
+# Кнопка для сброса данных
+@lab9.route('/lab9/reset', methods=['POST'])
+def reset():
+    # Очищаем данные из сессии
+    session.pop('sender_name', None)
+    session.pop('age', None)
+    session.pop('gender', None)
+    session.pop('preference', None)
+    session.pop('sweet_or_savory', None)
+    session.pop('congrats', None)
+    session.pop('image', None)
+    return redirect('/lab9/')  # Перенаправляем на главную страницу
