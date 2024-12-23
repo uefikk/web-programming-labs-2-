@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 9{% endblock %}
+
+{% block main %}
+    <h1>Новогодняя открытка</h1>
+    <form method="POST">
+        <label>Что вам больше нравится?</label><br>
+        <input type="radio" id="sweet" name="sweet_or_savory" value="sweet" required>
+        <label for="sweet">Сладкое</label><br>
+        <input type="radio" id="savory" name="sweet_or_savory" value="savory">
+        <label for="savory">Сытное</label><br>
+        <button type="submit">Далее</button>
+    </form>
+{% endblock %}

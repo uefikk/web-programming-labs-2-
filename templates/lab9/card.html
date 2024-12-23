@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 9{% endblock %}
+
+{% block main %}
+    <h1>Новогодняя открытка</h1>
+    <p>{{ congrats }}</p>
+    <img src="/static/images/{{ image }}" alt="Подарок" style="max-width: 300px; height: auto;">
+{% endblock %}
